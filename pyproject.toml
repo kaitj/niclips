@@ -1,0 +1,99 @@
+[build-system]
+requires = ["setuptools", "setuptools_scm[toml]>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "niclips"
+description = "Image and video generator visualizing (neuroimaging) datasets"
+authors = [
+  {name = "Connor Lane"},
+  {name = "Jason Kai", email = "21226986+kaitj@users.noreply.github.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Topic :: Scientific/Engineering",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13"
+]
+dependencies = []
+dynamic = ["version"]
+
+[project.urls]
+"Homepage" = "https://github.com/childmindresearch/niclips"
+
+[project.scripts]
+niclips = "niclips.__main__:main"
+
+[dependency-groups]
+dev = [
+  "mypy>=1.15.0",
+  "pre-commit>=4.2.0",
+  "ruff>=0.11.10",
+  "setuptools-scm>=8.3.1"
+]
+test = [
+  "pytest>=8.3.5",
+  "pytest-cov>=6.1.1"
+]
+
+[tool.setuptools_scm]
+write_to = "src/niclips/_version.py"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+markers = []
+log_cli = true
+log_cli_level = "DEBUG"
+
+[tool.coverage.report]
+exclude_also = ["assert", "__enter__", "__exit__", "pass"]
+
+[tool.coverage.run]
+omit = ["src/**/__init__.py", "src/**/typing.py"]
+
+[tool.mypy]
+ignore_missing_imports = true
+allow_redefinition = true
+disable_error_code = ["no-redef"]
+
+[tool.ruff]
+line-length = 88
+indent-width = 4
+src = ["src"]
+target-version = "py311"
+exclude = ["doc", "_version.py"]
+
+[tool.ruff.lint]
+select = ["ANN", "D", "E", "F", "I"]
+ignore = [
+  "ANN002",  # args should not be annotated.
+  "ANN003",  # kwargs should not be annotated.
+  "D105",  # undocumented-magic-method (e.g. __str__)
+  "D107"  # undocumented-public-init (e.g. __init__)
+]
+fixable = ["ALL"]
+unfixable = []
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/**/*.py" = [
+  "D",  # ignore missing docstrings
+  "ANN201"  # ignore missing return type
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
