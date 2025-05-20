@@ -8,8 +8,10 @@ wheels/
 .python-version
 _version.py
 
+# Test / cover reports
+.*_cache/
+.coverage
+
+
 # Virtual environments
 .venv
-
-# Dev tools
-.*_cache/

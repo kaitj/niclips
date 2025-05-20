@@ -159,12 +159,10 @@ source = { editable = "." }
 dev = [
     { name = "mypy" },
     { name = "pre-commit" },
-    { name = "ruff" },
-    { name = "setuptools-scm" },
-]
-test = [
     { name = "pytest" },
     { name = "pytest-cov" },
+    { name = "ruff" },
+    { name = "setuptools-scm" },
 ]
 
 [package.metadata]
@@ -173,12 +171,10 @@ test = [
 dev = [
     { name = "mypy", specifier = ">=1.15.0" },
     { name = "pre-commit", specifier = ">=4.2.0" },
-    { name = "ruff", specifier = ">=0.11.10" },
-    { name = "setuptools-scm", specifier = ">=8.3.1" },
-]
-test = [
     { name = "pytest", specifier = ">=8.3.5" },
     { name = "pytest-cov", specifier = ">=6.1.1" },
+    { name = "ruff", specifier = ">=0.11.10" },
+    { name = "setuptools-scm", specifier = ">=8.3.1" },
 ]
 
 [[package]]

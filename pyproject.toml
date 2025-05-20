@@ -34,12 +34,10 @@ niclips = "niclips.__main__:main"
 dev = [
   "mypy>=1.15.0",
   "pre-commit>=4.2.0",
+  "pytest>=8.3.5",
+  "pytest-cov>=6.1.1",
   "ruff>=0.11.10",
   "setuptools-scm>=8.3.1"
-]
-test = [
-  "pytest>=8.3.5",
-  "pytest-cov>=6.1.1"
 ]
 
 [tool.setuptools_scm]
@@ -56,7 +54,7 @@ log_cli_level = "DEBUG"
 exclude_also = ["assert", "__enter__", "__exit__", "pass"]
 
 [tool.coverage.run]
-omit = ["src/**/__init__.py", "src/**/typing.py"]
+omit = ["src/niclips/_version.py", "src/niclips/typing.py", "src/**/__init__.py"]
 
 [tool.mypy]
 ignore_missing_imports = true

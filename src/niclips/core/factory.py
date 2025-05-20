@@ -61,7 +61,7 @@ class ViewFactory:
             print("No views registered.")
         else:
             print("Available views:")
-            print(f"\n {name}" for name in cls._registry)
+            print("\n".join(cls._registry))
 
     @classmethod
     def register(cls, name: str | None = None) -> Callable[[F], F]:
