@@ -1,5 +1,6 @@
 """The factory of rendering images and videos."""
 
+import logging
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, ClassVar, TypeVar
@@ -58,17 +59,17 @@ class ViewFactory:
     def list(cls) -> None:
         """List all available views in registry."""
         if not cls._registry:
-            print("No views registered.")
+            logging.info("No views registered.")
         else:
-            print("Available views:")
-            print("\n".join(cls._registry))
+            logging.info("Available views:")
+            logging.info("\n".join(cls._registry))
 
     @classmethod
     def register(cls, name: str | None = None) -> Callable[[F], F]:
         """Register an image or video generation code."""
 
         def decorator(fn: F) -> F:
-            key = name if name is not None else cls.__name__
+            key = name if name is not None else fn.__name__
             cls._registry[key] = fn
             return fn
 

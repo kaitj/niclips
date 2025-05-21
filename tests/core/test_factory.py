@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 import pytest
@@ -29,25 +30,23 @@ class TestRenderedView:
 
 
 class TestViewFactory:
-    def test_list_no_views(self, capfd: pytest.CaptureFixture):
+    def test_list_no_views(self, caplog: pytest.LogCaptureFixture):
         factory.ViewFactory._registry.clear()
-        factory.ViewFactory.list()
+        with caplog.at_level(logging.INFO):
+            factory.ViewFactory.list()
+        assert "No views registered." in caplog.text
 
-        out, _ = capfd.readouterr()
-        assert "No views registered." in out
-
-    def test_list_views(self, capfd: pytest.CaptureFixture):
+    def test_list_views(self, caplog: pytest.LogCaptureFixture):
         factory.ViewFactory._registry.clear()
 
         @factory.ViewFactory.register("custom")
         def dummy_view() -> None:
             pass
 
-        factory.ViewFactory.list()
-        out, _ = capfd.readouterr()
-
-        assert "Available views:" in out
-        assert "custom" in out
+        with caplog.at_level(logging.INFO):
+            factory.ViewFactory.list()
+        assert "Available views:" in caplog.text
+        assert "custom" in caplog.text
 
     def test_register_and_render_ret_rendered_view(self):
         @factory.ViewFactory.register("custom")
