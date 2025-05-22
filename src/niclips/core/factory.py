@@ -1,6 +1,5 @@
 """The factory of rendering images and videos."""
 
-import logging
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, ClassVar, TypeVar
@@ -59,10 +58,10 @@ class ViewFactory:
     def list(cls) -> None:
         """List all available views in registry."""
         if not cls._registry:
-            logging.info("No views registered.")
+            print("No views registered.")
         else:
-            logging.info("Available views:")
-            logging.info("\n".join(cls._registry))
+            print("Available views:")
+            print("\n".join(cls._registry))
 
     @classmethod
     def register(cls, name: str | None = None) -> Callable[[F], F]:
@@ -78,7 +77,7 @@ class ViewFactory:
     @classmethod
     def _infer_output_path(
         cls, args: tuple[Any], kwargs: dict[str, Any]
-    ) -> Path | None:
+    ) -> Path | bool:
         """Infer output file path from arguments."""
         valid_exts = IMG_EXT | VID_EXT
         for v in (*args, *kwargs.values()):
@@ -88,8 +87,7 @@ class ViewFactory:
                     continue
                 if suffix in valid_exts:
                     return path
-                raise ValueError(f"Extension {suffix} currently unsupported")
-        return None
+        return False
 
     @classmethod
     def render(cls, name: str, *args, **kwargs) -> object:
@@ -105,7 +103,7 @@ class ViewFactory:
         inferred_path = cls._infer_output_path(args, kwargs)
         if not inferred_path:
             raise TypeError(
-                f"'{name}' did not return a RenderedView and no file path with a valid "
+                f"'{name}' did not return a RenderedView or no file path with a valid "
                 "extension could be inferred from arguments for auto-wrapping."
             )
 
