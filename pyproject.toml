@@ -32,12 +32,19 @@ niclips = "niclips.__main__:main"
 
 [dependency-groups]
 dev = [
+  "datalad>=1.2.0",
   "mypy>=1.15.0",
   "pre-commit>=4.2.0",
   "pytest>=8.3.5",
   "pytest-cov>=6.1.1",
   "ruff>=0.11.10",
   "setuptools-scm>=8.3.1"
+]
+neuro = [
+  "nilearn>=0.11.1"
+]
+plot = [
+  "matplotlib>=3.10.3"
 ]
 
 [tool.setuptools_scm]
