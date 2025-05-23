@@ -1,4 +1,3 @@
-import logging
 from pathlib import Path
 
 import pytest
@@ -30,23 +29,23 @@ class TestRenderedView:
 
 
 class TestViewFactory:
-    def test_list_no_views(self, caplog: pytest.LogCaptureFixture):
+    def test_list_no_views(self, capfd: pytest.CaptureFixture):
         factory.ViewFactory._registry.clear()
-        with caplog.at_level(logging.INFO):
-            factory.ViewFactory.list()
-        assert "No views registered." in caplog.text
+        factory.ViewFactory.list()
+        out, err = capfd.readouterr()
+        assert "No views registered." in out
 
-    def test_list_views(self, caplog: pytest.LogCaptureFixture):
+    def test_list_views(self, capfd: pytest.CaptureFixture):
         factory.ViewFactory._registry.clear()
 
         @factory.ViewFactory.register("custom")
         def dummy_view() -> None:
             pass
 
-        with caplog.at_level(logging.INFO):
-            factory.ViewFactory.list()
-        assert "Available views:" in caplog.text
-        assert "custom" in caplog.text
+        factory.ViewFactory.list()
+        out, err = capfd.readouterr()
+        assert "Available views:" in out
+        assert "custom" in out
 
     def test_register_and_render_ret_rendered_view(self):
         @factory.ViewFactory.register("custom")
@@ -80,14 +79,14 @@ class TestViewFactory:
         def render_bad_ext(path: str) -> object:
             return factory.RenderedView(path=path, metadata={}, figure_type="test")
 
-        with pytest.raises(ValueError, match="currently unsupported"):
+        with pytest.raises(TypeError, match="no file path with a valid extension"):
             factory.ViewFactory.render("bad_ext", "test.123")
 
     @pytest.mark.parametrize("path", [("test"), (123)])
     def test_render_invalid_path(self, path: object):
         @factory.ViewFactory.register("bad")
         def render_bad(path: str) -> object:
-            return "not a RenderedView"
+            return "did not return a RenderedView"
 
         with pytest.raises(TypeError, match="no file path with a valid extension"):
             factory.ViewFactory.render("bad", path=path)

@@ -45,4 +45,5 @@ def load_plugins_from_directory(directory: StrPath) -> None:
 
 def load_default_plugins() -> None:
     """Load package available plugins by default."""
-    pass
+    plugin_path = Path(__file__).parents[1] / "plugins"
+    load_plugins_from_directory(plugin_path)
